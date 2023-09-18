@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.persistance.mapper.IUserInfoMapper2">
+
+    <update id="updateNoticeInfo2" parameterType="UserInfo2DTO">
+        UPDATE USER_INFO
+        SET USER_INTRO = #{user_intro},
+            USER_NICK = #{user_nick}
+    </update>
+
+    <select id="getLogin2" parameterType="UserInfo2DTO" resultType="UserInfo2DTO">
+        SELECT USER_ID
+        FROM USER_INFO
+    </select>
+
+    <update id="updateProfile" parameterType="UserInfo2DTO">
+        UPDATE USER_INFO
+        SET PROFILE_PATH = #{profile_path}
+    </update>
+
+</mapper>

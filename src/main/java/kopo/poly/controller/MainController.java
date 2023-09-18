@@ -28,4 +28,31 @@ public class MainController {
         log.info(this.getClass().getName() + ".index Start!");
         return "/url";
     }
+    @GetMapping("/index4")
+    public String index4() throws Exception {
+        log.info(this.getClass().getName() + ".index4 함수 실행");
+        return "/index4";
+    }
+    @GetMapping("/index6")
+    public String index6() throws Exception {
+        log.info(this.getClass().getName() + ".index6 함수 실행");
+        return "/index6";
+    }
+    @GetMapping("/index8")
+    public String index8() throws Exception {
+        log.info(this.getClass().getName() + ".index8 함수 실행");
+        return "/index8";
+    }
+    @GetMapping("/searchFeed")
+    public String searchFeed() throws Exception {
+        log.info(this.getClass().getName() + ".searchFeed 함수 실행");
+        return "/searchFeed";
+    }
+
+    @GetMapping("/profile")
+    public String profile() throws Exception {
+        log.info(this.getClass().getName() + ".profile 함수 실행");
+
+        return "/profile";
+    }
 }

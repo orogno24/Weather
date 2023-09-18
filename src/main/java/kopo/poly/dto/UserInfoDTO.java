@@ -8,6 +8,7 @@ import lombok.Setter;
 public class UserInfoDTO {
 
     private String user_id;
+    private String user_pwd;
     private String user_name;
     private String password;
     private String email;
@@ -17,6 +18,12 @@ public class UserInfoDTO {
     private String reg_dt;
     private String chg_id;
     private String chg_dt;
+    private String user_email;
+    private String user_nick;
+    private String profile_path;
+    private String user_intro;
+    private String user_date;
+
 
     // 회원가입시, 중복가입을 방지 위해 사용할 변수
     // DB를 조회해서 회원이 존재하면 Y값을 반환함

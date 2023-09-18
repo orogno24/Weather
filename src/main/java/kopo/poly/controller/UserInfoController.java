@@ -173,18 +173,17 @@ public class UserInfoController {
         try {
 
             String user_id = CmmUtil.nvl(request.getParameter("user_id")); //아이디
-            String password = CmmUtil.nvl(request.getParameter("password")); //비밀번호
+            String user_pwd = CmmUtil.nvl(request.getParameter("user_pwd")); //비밀번호
 
             log.info("user_id : " + user_id);
-            log.info("password : " + password);
+            log.info("user_pwd : " + user_pwd);
 
             //웹(회원정보 입력화면)에서 받는 정보를 저장할 변수를 메모리에 올리기
             pDTO = new UserInfoDTO();
 
             pDTO.setUser_id(user_id);
+            pDTO.setUser_pwd(user_pwd);
 
-            //비밀번호는 절대로 복호화되지 않도록 알고리즘으로 암호화함
-            pDTO.setPassword(EncryptUtil.encHashSHA256(password));
             // 로그인을 위해 아이디와 비밀번호가 일치하는지 확인하기 위한 userInfoService 호출하기
             UserInfoDTO rDTO = userInfoService.getLogin(pDTO);
             /*
@@ -204,7 +203,7 @@ public class UserInfoController {
             if (CmmUtil.nvl(rDTO.getUser_id()).length() > 0) {
             /*
              * 세션에 회원아이디 저장하기, 추후 로그인여부를 체크하기 위해 세션에 값이 존재하는지 체크한다.
-             * 일반적으로 세션에 저장되는 키는 대문자로 입력하며, 앞에 SS를 붙ㅇ딘다.
+             * 일반적으로 세션에 저장되는 키는 대문자로 입력하며, 앞에 SS를 붙인다.
              *
              * Session 단어에서 SS를 가져온 것이다.
              */
@@ -213,7 +212,7 @@ public class UserInfoController {
 
                 //로그인 성공 메세지와 이동할 경로의 url
                 msg = "로그인이 성공했습니다. \n" + rDTO.getUser_name() + "님 환영합니다.";
-                url = "/main";
+                url = "/profile";
             } else{
                 msg = "로그인이 실패했습니다.";
                 url = "/user/login";
