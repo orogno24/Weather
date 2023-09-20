@@ -2,13 +2,15 @@ package kopo.poly.service.impl;
 
 import kopo.poly.dto.*;
 import kopo.poly.persistance.mapper.IHashtagMapper;
-import kopo.poly.persistance.mapper.IUserInfoMapper2;
 import kopo.poly.service.IDairyService;
+import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.List;
 
@@ -17,6 +19,14 @@ import java.util.List;
 @Service
 public class DiaryService implements IDairyService {
     private final IHashtagMapper hashtagMapper; // Mapper 가져오기
+
+    @Transactional
+    @Override
+    public void insertHashtag(HashtagdiaryDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + ".insertMailInfo start!");
+
+        hashtagMapper.insertHashtag(pDTO);
+    }
 
     @Override
     public List<FollowDTO> getfollowingId(FollowDTO pDTO) throws Exception {
@@ -44,6 +54,23 @@ public class DiaryService implements IDairyService {
         return rList;
     }
 
+    @Transactional
+    @Override
+    public FollowDTO countfollow(FollowDTO pDTO, boolean type) throws Exception {
+        log.info(this.getClass().getName() + ".countfollow start!");
+
+        return hashtagMapper.countfollow(pDTO);
+    }
+
+    @Transactional
+    @Override
+    public UserInfoDTO getnick(UserInfoDTO pDTO, boolean type) throws Exception {
+        log.info(this.getClass().getName() + ".getnick start!");
+
+        return hashtagMapper.getnick(pDTO);
+    }
+
+
     @Override
     public List<DiaryDTO> getHashtag(HashtagdiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + ".getHashtag 시작!");
@@ -65,12 +92,17 @@ public class DiaryService implements IDairyService {
     }
 
     @Override
-    public void uploadFile(MultipartFile file) throws Exception {
+    public void uploadFile(MultipartFile file, HttpSession session) throws Exception {
         log.info(this.getClass().getName() + ".uploadFile Start!");
 
+        String user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("user_id : " + user_id);
+
         UserInfoDTO pDTO = new UserInfoDTO();
+        pDTO.setUser_id(user_id);
 
         UserInfoDTO rDTO = hashtagMapper.getUserId(pDTO);
+        log.info("getUserId : " + user_id);
 
         log.info(rDTO.getUser_id() + ".uploadFile Start!");
 
@@ -82,7 +114,7 @@ public class DiaryService implements IDairyService {
 
         pDTO.setProfile_path(filePath);
 
-        hashtagMapper.updateProfile(pDTO);
+        hashtagMapper.updatePhoto(pDTO);
 
         log.info(this.getClass().getName() + ".uploadFile End!");
     }

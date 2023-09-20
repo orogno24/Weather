@@ -71,6 +71,67 @@ public class DiaryController {
         return "/getfollowId";
     }
 
+    @GetMapping(value = "countfollow")
+    public String countfollow(HttpSession session, ModelMap model) throws Exception {
+        log.info(this.getClass().getName() + ".getfollowId 시작!");
+
+        String user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("user_id : " + user_id);
+
+        FollowDTO pDTO = new FollowDTO();
+        pDTO.setFollow_id(user_id);
+        pDTO.setFollowing_id(user_id);
+
+        FollowDTO rDTO = Optional.ofNullable(dairyService.countfollow(pDTO, true))
+                .orElseGet(FollowDTO::new);
+
+        model.addAttribute("rDTO", rDTO);
+
+        log.info("Controller Layer rList content: {}", rDTO);
+
+        log.info(this.getClass().getName() + ".getfollowId End!");
+
+        return "/countfollow";
+    }
+
+
+    @GetMapping(value = "profile")
+    public String profile(HttpSession session, ModelMap model) throws Exception {
+        log.info(this.getClass().getName() + ".profile 함수 실행");
+
+        String user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("user_id : " + user_id);
+
+        UserInfoDTO pDTO = new UserInfoDTO();
+        pDTO.setUser_id(user_id);
+
+        UserInfoDTO rDTO = Optional.ofNullable(dairyService.getnick(pDTO, true))
+                .orElseGet(UserInfoDTO::new);
+
+        model.addAttribute("rDTO", rDTO);
+
+        log.info("user_nick : " + rDTO.getUser_nick());
+        log.info("user_intro : " + rDTO.getUser_intro());
+
+        log.info(this.getClass().getName() + ".profile End!");
+
+        return "/profile";
+    }
+
+    @PostMapping(value = "/uploadPhoto")
+    public String uploadPhoto(@RequestPart MultipartFile file, ModelMap model, HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName() + ".uploadPhoto Start!");
+
+        dairyService.uploadFile(file, session);
+
+        String msg = "수정되었습니다.";
+        model.addAttribute("msg", msg);
+
+        return "/profile";
+    }
+
+
 
     @ResponseBody
     @PostMapping(value = "getHashtag")
@@ -94,8 +155,42 @@ public class DiaryController {
         return rList;
     }
 
+    @PostMapping(value = "/insertHashtag")
+    public String insertHashtag(HttpServletRequest request, ModelMap model) {
+
+        log.info(this.getClass().getName() + ".insertHashtag 시작!");
+
+        String msg = "";
+        String url = "/hashinsert";
+
+        try {
+            String hashtagId = CmmUtil.nvl(request.getParameter("hashtagId"));
+
+            log.info("hashtagId : " + hashtagId);
+
+            msg = "해시태그 추가 성공";
+
+            HashtagdiaryDTO pDTO = new HashtagdiaryDTO();
+
+            pDTO.setHashtagId(hashtagId);
+
+            dairyService.insertHashtag(pDTO);
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+        } finally {
+            model.addAttribute("msg", msg);
+            model.addAttribute("url", url);
+            log.info(this.getClass().getName() + ".insertHashtag End!");
+        }
+
+        return "/redirect";
+    }
+
     @PostMapping(value = "/profileUpdate")
-    public String profileUpdate(HttpSession session, ModelMap model, HttpServletRequest request){
+    public String profileUpdate(HttpSession session, ModelMap model, HttpServletRequest request) {
 
         log.info(this.getClass().getName() + ".profileUpdate Start!");
 
@@ -104,8 +199,8 @@ public class DiaryController {
 
         try {
             String user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-            String user_intro = CmmUtil.nvl( request.getParameter("user_intro"));
-            String user_nick = CmmUtil.nvl( request.getParameter("user_nick"));
+            String user_intro = CmmUtil.nvl(request.getParameter("user_intro"));
+            String user_nick = CmmUtil.nvl(request.getParameter("user_nick"));
 
             log.info("user_id : " + user_id);
             log.info("user_intro : " + user_intro);
@@ -119,7 +214,7 @@ public class DiaryController {
             dairyService.updateProfile(pDTO);
 
             msg = "수정되었습니다.";
-        } catch (Exception e){
+        } catch (Exception e) {
             msg = "실패하였습니다. : " + e.getMessage();
             log.info(e.toString());
             e.printStackTrace();
@@ -130,19 +225,6 @@ public class DiaryController {
         }
 
         return "/redirect";
-    }
-
-    @PostMapping(value = "/uploadPhoto")
-    public String uploadPhoto(@RequestPart MultipartFile file, ModelMap model) throws Exception {
-
-        log.info(this.getClass().getName() + ".upload Start!");
-
-        dairyService.uploadFile(file);
-
-        String msg = "수정되었습니다.";
-        model.addAttribute("msg", msg);
-
-        return "/profile";
     }
 
 }

@@ -8,13 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -68,7 +66,7 @@ public class NoticeController2 {
         String msg = "수정되었습니다.";
         model.addAttribute("msg", msg);
 
-        return "/index8";
+        return "/profile";
     }
 
 }

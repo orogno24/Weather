@@ -21,7 +21,7 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
 
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const imageThumbnail = document.getElementById('imageThumbnail');
                     imageThumbnail.src = e.target.result;
                 }
@@ -29,6 +29,7 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
         function changeText() {
             var newText = prompt("새로운 닉네임을 입력하세요:");
             if (newText !== null) {
@@ -89,6 +90,7 @@
             font-size: 17px;
             margin-left: -10px;
         }
+
         #imageInput {
             display: none;
         }
@@ -115,12 +117,15 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-3">
-                <a href="/getfollowingId" class="logo custom-logo"><img src="/assets/img/logo.PNG" alt="Logo" class="img-fluid custom-logo-img"></a>
+                <a href="/getfollowingId" class="logo custom-logo"><img src="/assets/img/logo.PNG" alt="Logo"
+                                                                        class="img-fluid custom-logo-img"></a>
             </div>
             <div class="col-5">
                 <div class="search-input">
                     <form id="search" action="#">
-                        <input type="text" placeholder="검색어를 입력해주세요.                                                   🔍︎" id="searchText" name="searchKeyword" />
+                        <input type="text"
+                               placeholder="검색어를 입력해주세요.                                                   🔍︎"
+                               id="searchText" name="searchKeyword"/>
                     </form>
                 </div>
             </div>
@@ -133,10 +138,12 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/getfollowId" style="font-size: 17px; font-family: 'Nanum Square', sans-serif; color: #58A581; margin-right: -13px;">로그아웃</a>
+                            <a href="/getfollowId"
+                               style="font-size: 17px; font-family: 'Nanum Square', sans-serif; color: #58A581; margin-right: -13px;">로그아웃</a>
                         </li>
                         <li>
-                            <a class="getstarted" href="/searchFeed" style="font-size: 17px; font-family: 'Nanum Square', sans-serif;">마이페이지</a>
+                            <a class="getstarted" href="/countfollow"
+                               style="font-size: 17px; font-family: 'Nanum Square', sans-serif;">마이페이지</a>
                         </li>
                     </ul>
                 </nav>
@@ -150,10 +157,13 @@
         <div style="display: flex; flex-direction: column; align-items: center; margin-left: -90px;">
 
             <div style="display: flex; align-items: center; position: relative; margin-left: -10px; margin-top: -30px;">
-                <img id="imageThumbnail" src="assets/img/profile2.PNG" alt="Thumbnail" style="width: 150px; height: 150px; object-fit: cover; border: 1px solid #ddd; border-radius: 50%;">
+                <img id="imageThumbnail" src="assets/img/profile2.PNG" alt="Thumbnail"
+                     style="width: 150px; height: 150px; object-fit: cover; border: 1px solid #ddd; border-radius: 50%;">
 
-                <form method="post" th:action="@{/uploadPhoto}" enctype="multipart/form-data" style="margin-left: 10px;">
-                    <input multiple type="file" name="file" id="imageInput" accept="image/*" onchange="changeImage(this)" style="display: none;">
+                <form method="post" th:action="@{/uploadPhoto}" enctype="multipart/form-data"
+                      style="margin-left: 10px;">
+                    <input multiple type="file" name="file" id="imageInput" accept="image/*"
+                           onchange="changeImage(this)" style="display: none;">
                     <button type="submit">변경</button>
                     <label for="imageInput" id="cameraIcon" style="font-size: 24px; cursor: pointer;">📷</label>
                 </form>
@@ -161,8 +171,9 @@
 
             <div style="display: flex; align-items: center; margin-top: 40px;">
 
-                <p id="dynamicText" style="color: black; font-size: 24px; margin-right: 10px;">김민티</p>
-                <a href="#" class="btn custom-button" style="border: none; background-color: #58A581; color: white; padding: 8px 20px; font-size: 14px; border-radius: 20px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); margin-left: 5px; margin-bottom: 14px;"
+                <p id="dynamicText" style="color: black; font-size: 24px; margin-right: 10px;">[[${rDTO.user_nick}]]</p>
+                <a href="#" class="btn custom-button"
+                   style="border: none; background-color: #58A581; color: white; padding: 8px 20px; font-size: 14px; border-radius: 20px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); margin-left: 5px; margin-bottom: 14px;"
                    onmouseover="this.style.backgroundColor='#6CBF91'; this.style.boxShadow='0px 6px 12px rgba(0, 0, 0, 0.6)';"
                    onmouseout="this.style.backgroundColor='#58A581'; this.style.boxShadow='0px 4px 10px rgba(0, 0, 0, 0.4)';"
                    onclick="changeText()">변경</a>
@@ -176,18 +187,25 @@
 
         <div style="margin: -24px auto 0; width: 300px; border-radius: 10px; background-color: transparent; padding: 20px; transform: translateX(16px);">
             <!-- 상태메시지 입력 요소 -->
-            <textarea id="statusMessage" name="user_intro" placeholder="상태메세지를 입력해 주세요. 🖊" style="border: none; outline: none; width: 100%; background-color: transparent; font-size: 19px;"></textarea>
+            <textarea id="statusMessage"
+                      name="user_intro"
+                      th:placeholder="${rDTO.user_intro != null ? rDTO.user_intro + '🖊' : '상태메세지를 입력해 주세요. 🖊'}"
+                      style="border: none; outline: none; width: 100%; background-color: transparent; font-size: 19px;">
+</textarea>
         </div>
         <div class="text-center" style="margin-top: 24px;">
-            <button class="btn custom-button" type="submit" style="border: none; background-color: #58A581; color: white; padding: 16px 40px; font-size: 28px; border-radius: 50px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); margin-top: 20px; margin-right: -24px;"
+            <button class="btn custom-button" type="submit"
+                    style="border: none; background-color: #58A581; color: white; padding: 16px 40px; font-size: 28px; border-radius: 50px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); margin-top: 20px; margin-right: -24px;"
                     onmouseover="this.style.backgroundColor='#6CBF91'; this.style.boxShadow='0px 6px 12px rgba(0, 0, 0, 0.6)';"
                     onmouseout="this.style.backgroundColor='#58A581'; this.style.boxShadow='0px 4px 10px rgba(0, 0, 0, 0.4)';"
-                    onclick="새페이지로이동()">수정완료</button>
+                    onclick="새페이지로이동()">수정완료
+            </button>
         </div>
     </form>
 </main>
 
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
 <script src="assets/vendor/aos/aos.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

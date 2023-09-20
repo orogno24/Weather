@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>팔로워, 팔로잉 수</title>
+    <link rel="stylesheet" href="/css/table.css"/>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        function 페이지이동(url) {
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+<h2>팔로워, 팔로잉 수</h2>
+<hr/>
+<br/>
+<div class="divTable minimalistBlack">
+    <div class="divTableBody">
+        <div class="divTableRow">
+            <div class="divTableCell">팔로워 수
+            </div>
+            <div class="divTableCell">[[${rDTO.following_count}]]명
+            </div>
+        </div>
+        <div class="divTableRow">
+            <div class="divTableCell">팔로잉 수
+            </div>
+            <div class="divTableCell">[[${rDTO.follower_count}]]명
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <button id="btnEdit" type="button" onclick="페이지이동('getfollowId')">팔로워</button>
+    <button id="btnDelete" type="button" onclick="페이지이동('getfollowingId')">팔로잉</button>
+    <button id="btnList" type="button" onclick="페이지이동('profile')">돌아가기</button>
+</div>
+</body>
+</html>

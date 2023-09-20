@@ -10,21 +10,31 @@
         where HD.HASHTAG_ID = #{hashtagId}
     </select>
 
+    <insert id="insertHashtag" parameterType="HashtagDTO">
+        INSERT INTO HASHTAG (HASHTAG_ID, TOTAL_CNT)
+        VALUES (
+                   #{hashtagId}, 1
+               )
+            ON DUPLICATE KEY UPDATE TOTAL_CNT = TOTAL_CNT + 1;
+    </insert>
+
     <update id="updateProfile" parameterType="UserInfoDTO">
         UPDATE USER_INFO
         SET USER_INTRO = #{user_intro},
-            USER_NICK = #{user_nick}
+            USER_NICK  = #{user_nick}
         WHERE USER_ID = #{user_id};
     </update>
 
     <select id="getUserId" parameterType="UserInfoDTO" resultType="UserInfoDTO">
         SELECT USER_ID
         FROM USER_INFO
+        WHERE USER_ID = #{user_id};
     </select>
 
     <update id="updatePhoto" parameterType="UserInfoDTO">
         UPDATE USER_INFO
         SET PROFILE_PATH = #{profile_path}
+        WHERE USER_ID = #{user_id};
     </update>
 
     <select id="getfollowingId" resultType="FollowDTO">
@@ -39,7 +49,16 @@
         WHERE FOLLOWING_ID = #{following_id};
     </select>
 
+    <select id="countfollow" resultType="FollowDTO">
+        SELECT (SELECT COUNT(FOLLOWING_ID) FROM FOLLOW WHERE FOLLOW_ID = #{follow_id})    AS following_count,
+               (SELECT COUNT(FOLLOW_ID) FROM FOLLOW WHERE FOLLOWING_ID = #{following_id}) AS follower_count;
+    </select>
 
+    <select id="getnick" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT USER_NICK, USER_INTRO
+        FROM USER_INFO
+        WHERE USER_ID = #{user_id};
+    </select>
 
 
 </mapper>
